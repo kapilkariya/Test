@@ -9,6 +9,7 @@ const Login = ({ settoken }) => {
   const [password, setPassword] = useState('')
 
   const onSubmitHandler = async (e) => {
+    console.log("dubmit clickrd")
     try {
       e.preventDefault()
       const payload = state === 'SignUp' ? { email, name, password } : { email, password }
