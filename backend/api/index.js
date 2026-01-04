@@ -16,7 +16,7 @@ app.get('/',(req,res)=>{
 
 app.use('/api',auth);
 
-export default app;
-// app.listen(3000, () => {
-//   console.log(`Example app listening on port 3000`)
-// })
+// export default app;
+app.listen(3000, () => {
+  console.log(`Example app listening on port 3000`)
+})
