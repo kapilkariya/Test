@@ -8,7 +8,9 @@ const router = express.Router();
 // signin
 
 router.post('/register', async (req, res) => {
+  console.log('tese1')
   try {
+    console.log('tese2')
     const salt = await bcrypt.genSalt(10);
     const { email, name, password } = req.body;
     const hashpass = await bcrypt.hash(password, salt);
