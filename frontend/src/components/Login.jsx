@@ -107,7 +107,7 @@ const Login = ({ settoken }) => {
 
           {/* Submit Button */}
           <button
-            type='submit'
+            type='submit' onClick={()=>console.log("btn clicked")}
             className='w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-3 px-4 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all transform hover:-translate-y-0.5'
           >
             {state === 'SignUp' ? 'Create Account' : 'Sign In'}
