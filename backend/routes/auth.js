@@ -8,9 +8,7 @@ const router = express.Router();
 // signin
 
 router.post('/register', async (req, res) => {
-  console.log('tese1')
   try {
-    console.log('tese2')
     const salt = await bcrypt.genSalt(10);
     const { email, name, password } = req.body;
     const hashpass = await bcrypt.hash(password, salt);
@@ -18,12 +16,13 @@ router.post('/register', async (req, res) => {
     if (existinguser) {
       return res.status(400).json({ message: "already exists" });
     }
-    const user = new User({ email, name, password: hashpass });
+    const user = new User({ email, name, password: password });
     await user.save().then(() => {
       return res.status(200).json({ message: "data saved" });
     })
   } catch (error) {
     console.log(error)
+    return res.status(200).json({ message: "error" });
   }
 })
 
