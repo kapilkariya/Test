@@ -119,7 +119,7 @@ const Login = ({ settoken }) => {
               <button
                 type='button'
                 onClick={() => setState(state === 'SignUp' ? 'Login' : 'SignUp')}
-                className='ml-2 text-red-600 hover:text-red-800 font-semibold focus:outline-none focus:underline'
+                className='ml-2 text-blue-600 hover:text-blue-800 font-semibold focus:outline-none focus:underline'
               >
                 {state === 'SignUp' ? 'Sign In' : 'Sign Up'}
               </button>
