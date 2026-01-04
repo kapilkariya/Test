@@ -8,7 +8,6 @@ const router = express.Router();
 // signin
 
 router.post('/register', async (req, res) => {
-  return res.status(400).json({ message: "already exists" });
   try {
     const salt = await bcrypt.genSalt(10);
     const { email, name, password } = req.body;
