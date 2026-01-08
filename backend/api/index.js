@@ -3,30 +3,36 @@ import 'dotenv/config'
 import connec from '../conn/conn.js';
 import auth from '../routes/auth.js'
 import cors from 'cors'
+
+// 1. Create app FIRST
+const app = express();
+
+// 2. Configure CORS with CORRECT frontend URL
 const corsOptions = {
   origin: [
-    'https://test-nine-black-40.vercel.app',  // Your Vercel domain
-    'http://localhost:3000',                   // For local development
-    'http://localhost:5173'                    // If using Vite locally
+    'https://test-five-alpha-61.vercel.app',  // ← YOUR ACTUAL FRONTEND URL (was wrong!)
+    'http://localhost:3000',
+    'http://localhost:5173'
   ],
-  credentials: true,  // If you're using cookies/sessions
+  credentials: true,
   optionsSuccessStatus: 200
 };
 
-app.use(cors(corsOptions))a;
+// 3. Connect to database
 connec();
 
-const app=express();
-app.use(cors());
-app.use(express.json())
+// 4. Use CORS (only once!)
+app.use(cors(corsOptions));
 
-app.get('/',(req,res)=>{
+// 5. Body parser
+app.use(express.json());
+
+// 6. Routes
+app.get('/', (req, res) => {
   res.send("helloo world")
-})
+});
 
-app.use('/api',auth);
+app.use('/api', auth);
 
+// 7. Export for Vercel
 export default app;
-// app.listen(3000, () => {
-//   console.log(`Example app listening on port 3000`)
-// })
