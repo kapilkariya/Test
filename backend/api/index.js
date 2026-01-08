@@ -4,19 +4,37 @@ import connec from '../conn/conn.js';
 import auth from '../routes/auth.js'
 import cors from 'cors'
 
+// 1. First create the app
+const app = express();
+
+// 2. Then configure CORS
+const corsOptions = {
+  origin: [
+    'https://test-nine-black-40.vercel.app',  // Your Vercel domain
+    'http://localhost:3000',                   // For local development
+    'http://localhost:5173'                    // If using Vite locally
+  ],
+  credentials: true,  // If you're using cookies/sessions
+  optionsSuccessStatus: 200
+};
+
+// 3. Connect to database
 connec();
 
-const app=express();
-app.use(cors());
-app.use(express.json())
+// 4. Use CORS only once
+app.use(cors(corsOptions));
 
-app.get('/',(req,res)=>{
+// 5. Other middleware
+app.use(express.json());
+
+// 6. Routes
+app.get('/', (req, res) => {
   res.send("helloo world")
-})
+});
 
-app.use('/api',auth);
+app.use('/api', auth);
 
-// export default app;
+// 7. Start server
 app.listen(3000, () => {
   console.log(`Example app listening on port 3000`)
-})
+});
