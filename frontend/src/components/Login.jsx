@@ -20,7 +20,6 @@ const Login = ({ settoken }) => {
       setName('')
       setPassword('')
       console.log(res.data.message);  
-      alert(res.data.message);  
     } catch (error) {
       console.log(error.message)
     }
