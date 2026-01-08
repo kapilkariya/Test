@@ -19,9 +19,10 @@ const Login = ({ settoken }) => {
       setEmail('')
       setName('')
       setPassword('')
+      console.log(res.data.message);  
       alert(res.data.message);  
     } catch (error) {
-      console.log(error)
+      console.log(error.message)
     }
   }
 
