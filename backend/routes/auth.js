@@ -1,7 +1,7 @@
 import User from "../models/user.js";
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 const router = express.Router();
 
 
@@ -22,7 +22,7 @@ router.post('/register', async (req, res) => {
     })
   } catch (error) {
     console.log(error)
-    return res.status(200).json({ message: "error" });
+    return res.status(200).json({ message:error.message});
   }
 })
 
