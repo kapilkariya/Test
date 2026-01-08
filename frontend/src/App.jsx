@@ -42,7 +42,7 @@ const App = () => {
   }
 
   if (!token) {
-    return <Login setToken={setToken} />
+    return <Login settoken={setToken} />
   }
 
   // Dashboard components

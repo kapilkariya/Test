@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import axios from 'axios'
+import { GoogleLogin } from '@react-oauth/google'
 
 const Login = ({ settoken }) => {
   const [state, setState] = useState('SignUp')
@@ -9,17 +10,16 @@ const Login = ({ settoken }) => {
   const [password, setPassword] = useState('')
 
   const onSubmitHandler = async (e) => {
-    console.log("dubmit clickrd")
     try {
       e.preventDefault()
       const payload = state === 'SignUp' ? { email, name, password } : { email, password }
       const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/${state === 'SignUp' ? 'register' : 'login'}`, payload)
-      alert(res.data.message);
       localStorage.setItem("token", res.data.token);
       settoken(res.data.token)
       setEmail('')
       setName('')
       setPassword('')
+      alert(res.data.message);  
     } catch (error) {
       console.log(error)
     }

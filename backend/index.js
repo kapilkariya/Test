@@ -1,7 +1,7 @@
 import express from 'express';
 import 'dotenv/config'
-import connec from '../conn/conn.js';
-import auth from '../routes/auth.js'
+import connec from './conn/conn.js';
+import auth from './routes/auth.js'
 import cors from 'cors'
 
 connec();
