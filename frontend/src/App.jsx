@@ -1,33 +1,36 @@
 import React, { useState, useEffect } from 'react'
 import Login from './components/Login'
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
-import {
-  Home,
-  BarChart3,
-  Users,
-  Settings,
-  Calendar,
-  FileText,
-  Bell,
-  Search,
-  LogOut,
-  User,
-  Shield,
-  CreditCard,
-  HelpCircle
-} from 'lucide-react'
+import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom'
+import { Home, BarChart3, Users, Settings, Calendar, FileText, Bell, Search, LogOut, User, Shield, CreditCard, HelpCircle } from 'lucide-react'
+
 
 const App = () => {
   const [token, setToken] = useState(localStorage.getItem("token"))
   const [user, setUser] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(true)
 
+
+  useEffect(()=>{
+    const handleauth=async()=>{
+      const params=new URLSearchParams(window.location.search);
+      console.log(params)
+      const accesstoken=params.get('token')
+      console.log(accesstoken);
+      if(accesstoken){
+        localStorage.setItem("token",accesstoken)
+        setToken(accesstoken);
+        window.history.replaceState({}, document.title, "/");
+      }
+    }
+    handleauth();
+  },[])
+
   // Mock user data - replace with actual API call
   useEffect(() => {
     if (token) {
       // In real app, fetch user data with token
       setUser({
-        name: "John Doe",
+        name: "John Doe", 
         email: "john@example.com",
         avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
         role: "Administrator"

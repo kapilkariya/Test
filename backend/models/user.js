@@ -8,11 +8,15 @@ const userschema=new mongoose.Schema({
   },
   name:{
     type:String,
-    required:true
   },
   password:{
     type:String,
-    required:true
+  },
+  googleId:{
+    type:String,
+  },
+  avatar:{
+    type:String,
   }
 })
 

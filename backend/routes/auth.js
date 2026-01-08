@@ -10,15 +10,15 @@ router.post('/register', async (req, res) => {
     const { email, name, password } = req.body;
     
     // Validate input
-    if (!email || !name || !password) {
-      return res.status(400).json({ message: "All fields required" });
+    if (!email || !name || !password) { 
+      return res.status(200).json({ message: "All fields required" });
     }
 
     // Check if user exists with timeout
     const existinguser = await User.findOne({ email }).maxTimeMS(10000); // 10 sec timeout
     
     if (existinguser) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(200).json({ message: "User already exists" });
     }
 
     // Hash password

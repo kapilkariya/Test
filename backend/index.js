@@ -2,13 +2,15 @@ import express from 'express';
 import 'dotenv/config'
 import connec from './conn/conn.js';  // Check this path!
 import auth from './routes/auth.js'   // Check this path!
+import authroute from './routes/authroute.js'   // Check this path!
 import cors from 'cors'
+import "./config/passport.js"
 
 const app = express();
 
 // CORS Configuration - MUST be before routes
 const corsOptions = {
-  origin: 'https://test-five-alpha-61.vercel.app',
+  origin: process.env.CLIENT_URL,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -28,7 +30,11 @@ app.get('/', (req, res) => {
   res.send("helloo world")
 });
 
+app.use('/auth',authroute);
 app.use('/api', auth);
 
 // Export for Vercel
-export default app;
+// export default app;
+app.listen(3000, () => {
+  console.log(`Example app listening on port 3000`)
+})
