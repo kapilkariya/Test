@@ -4,68 +4,103 @@ import jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcryptjs';
 const router = express.Router();
 
-
-// signin
-
+// Register
 router.post('/register', async (req, res) => {
   try {
-    const salt = await bcrypt.genSalt(10);
     const { email, name, password } = req.body;
-    const hashpass = await bcrypt.hash(password, salt);
-    const existinguser = await User.findOne({ email })
-    if (existinguser) {
-      return res.status(200).json({ message: "already exists" });
+    
+    // Validate input
+    if (!email || !name || !password) {
+      return res.status(400).json({ message: "All fields required" });
     }
-    const user = new User({ email, name, password: hashpass});
-    await user.save().then(() => {
-      return res.status(200).json({ message: "data saved" });
-    })
+
+    // Check if user exists with timeout
+    const existinguser = await User.findOne({ email }).maxTimeMS(10000); // 10 sec timeout
+    
+    if (existinguser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashpass = await bcrypt.hash(password, salt);
+    
+    // Create and save user
+    const user = new User({ email, name, password: hashpass });
+    await user.save();
+    
+    return res.status(201).json({ 
+      message: "Registration successful",
+      success: true 
+    });
+
   } catch (error) {
-    console.log(error)
-    return res.status(200).json({ message:error.message});
+    console.error("Registration error:", error);
+    return res.status(500).json({ 
+      message: "Registration failed", 
+      error: error.message 
+    });
   }
-})
+});
 
-
-//login
-
+// Login
 router.post('/login', async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
-    if (user) {
-      const ismatch = await bcrypt.compare(req.body.password, user.password)
-      if (!ismatch) {
-        return res.status(200).json({ message: "password incorrect" })
-      }
-      const token = jwt.sign(
-        { id: user._id },
-        process.env.SECRET,
-        { expiresIn: "1d" }
-      )
-      return res.status(200).json({
-        message: "logged in successfully",
-        token: token,
-        user: {
-          id: user._id,
-          email: user.email,
-          name: user.name
-        }
-      });
+    const { email, password } = req.body;
+    
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password required" });
     }
 
+    // Find user with timeout
+    const user = await User.findOne({ email }).maxTimeMS(10000);
+    
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // Check password
+    const ismatch = await bcrypt.compare(password, user.password);
+    
+    if (!ismatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // Generate token
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.SECRET,
+      { expiresIn: "1d" }
+    );
+
+    return res.status(200).json({
+      message: "Login successful",
+      success: true,
+      token: token,
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name
+      }
+    });
+
   } catch (error) {
-    console.log(error)
-    res.status(200).json({ message: "no user" })
+    console.error("Login error:", error);
+    return res.status(500).json({ 
+      message: "Login failed", 
+      error: error.message 
+    });
   }
-})
+});
 
 router.delete('/del', async (req, res) => {
   try {
-    const user = await User.deleteOne({ email: req.body.email });
-    return res.status(200).json({ message: "user deleted" })
+    await User.deleteOne({ email: req.body.email });
+    return res.status(200).json({ message: "User deleted" });
   } catch (error) {
-    console.log(error)
+    console.error("Delete error:", error);
+    return res.status(500).json({ message: "Delete failed" });
   }
-})
+});
 
 export default router;
