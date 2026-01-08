@@ -3,11 +3,6 @@ import 'dotenv/config'
 import connec from '../conn/conn.js';
 import auth from '../routes/auth.js'
 import cors from 'cors'
-
-// 1. First create the app
-const app = express();
-
-// 2. Then configure CORS
 const corsOptions = {
   origin: [
     'https://test-nine-black-40.vercel.app',  // Your Vercel domain
@@ -18,23 +13,20 @@ const corsOptions = {
   optionsSuccessStatus: 200
 };
 
-// 3. Connect to database
+app.use(cors(corsOptions))a;
 connec();
 
-// 4. Use CORS only once
-app.use(cors(corsOptions));
+const app=express();
+app.use(cors());
+app.use(express.json())
 
-// 5. Other middleware
-app.use(express.json());
-
-// 6. Routes
-app.get('/', (req, res) => {
+app.get('/',(req,res)=>{
   res.send("helloo world")
-});
+})
 
-app.use('/api', auth);
+app.use('/api',auth);
 
-// 7. Start server
-app.listen(3000, () => {
-  console.log(`Example app listening on port 3000`)
-});
+export default app;
+// app.listen(3000, () => {
+//   console.log(`Example app listening on port 3000`)
+// })
